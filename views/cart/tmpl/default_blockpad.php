@@ -131,9 +131,9 @@ if(is_object($this->cart) && isset($this->cart->cartPrices) && array_key_exists(
                         $blockpad_register = $input->post->get('blockpad_register',0,'int');  
                         if(($blockpad_source == 1 || $blockpad_register == 1) && $user_id <= 0)  {
                                 ?>
-                <p><input name="fxbregisterselected" value="1" id="creditid"  onclick="displayPanel(1);" type="radio" checked="checked"> I want Register</p>
+                <p><input name="fxbregisterselected" value="1" id="creditid2"  onclick="displayPanel(1);" type="radio" checked="checked"> I want Register</p>
                 <h4 style="color:red;">OR</h4>
-                <p><input name="fxbregisterselected" value="2" id="paypalid" onclick="displayPanel(0);" type="radio" > I want Login</p>
+                <p><input name="fxbregisterselected" value="2" id="paypalid2" onclick="displayPanel(0);" type="radio" > I want Login</p>
                  <input type="hidden" name="blockpad_register" value="1">
                 <div id="fxblogpanel" style="display: none;">
                     <div class="form-group">
@@ -467,8 +467,9 @@ if(is_object($this->cart) && isset($this->cart->cartPrices) && array_key_exists(
                 ?>
                 
                 
-                
+                <?php if(false){?>
                 <p><input name="fxpaymentmethod" value="1" id="creditid"  onclick="selectMethod(1);" type="radio" <?php echo $cardchecked; ?>> Credit Card</p>
+                        <?php  } ?>
                 <p><input name="fxpaymentmethod" value="0" id="paypalid" onclick="selectMethod(0);" type="radio" <?php echo $paypalchecked; ?>> Paypal</p>
                  <?php if(false){//BITCOIN OPTION IS NOT SUPPORTED BY STRIPE ?>
                 <p><input name="fxpaymentmethod" value="2" id="bitcoinid" onclick="selectMethod(2);" type="radio" <?php echo $bitcoinchecked; ?>> Bitcoin </p>

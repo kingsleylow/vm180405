@@ -32,6 +32,9 @@ if(array_key_exists('fxbotmarket_type_of_product', $GLOBALS)){
                 $app->redirect(JRoute::_('index.php?option=com_fxbotmarket&view=customerdownloads' , false),'Order successful');
             }
         }
+    }elseif($type_of_product == 1001){
+        $app = JFactory::getApplication();
+        $app->redirect('index.php?option=com_fxbotmarket&view=customerblockpads');
     }
 }
 echo "<h3>" . $this->paymentResponse . "</h3>";

@@ -363,6 +363,78 @@ class VirtueMartControllerCart extends JControllerLegacy {
 		}
 
 	}
+        public function registerlogin2(){
+
+            $app = JFactory::getApplication();
+            $input = $app->input;
+            $data = array();
+            $data['username'] = $input->post->get('fxbusername','','string');
+            $data['email1'] = $input->post->get('fxbemail1','','string');
+            if(!filter_var($data['email1'],FILTER_VALIDATE_EMAIL)){
+                $app->enqueueMessage('Email has wrong format;');
+                return false;
+            }
+            $data['password1'] = $input->post->get('fxbpassword1','','string');
+            $data['name'] = $input->post->get('fxbname','','string');
+            $data['cf_phone'] = $input->post->get('fxbcf_phone','','string');
+            $data['email']		= $data['email1'];
+            $data['password']	= $data['password1'];
+            // Initialise the table with JUser.
+            if(!class_exists('FxbotmarketUser')) {
+                include_once JPATH_ROOT.'/components/com_fxbotmarket/helpers/fxbotmarketuser.php';
+                }
+            $data['groups'] = array(FxbotmarketUser::getRegisteredGroupId());
+            $data['accepted_terms'] = 1;
+            $data['cf_additiona_phones'] = "";
+            $data['cf_address'] = "";
+            $data['cf_city'] = "";
+            $data['cf_state_province'] = "";
+            $data['cf_zip'] = "";
+            $data['ip_address'] = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+            $code_of_country = $input->post->get('fxbcountry_id',0,'int');//[fxbotmarket_country_id]	string	"16"
+            $mt_accounts = array();//[fxbcountry_id]	string	"13"	
+            $seller_info = new stdClass();
+            $braintreeinfo = new stdClass();
+            $braintreeinfo->braincustomerid = "";
+            $braintreeinfo->paymentmethod = "";
+            $braintreeinfo->paymentverified = "";
+            $braintreeinfo->firstname = $data['name'];
+            $braintreeinfo->lastname = "";
+            if(!class_exists('UuModelRegistration')) {
+                include_once JPATH_ROOT.'/components/com_uu/models/registration.php';
+            }
+            //UStringHelper
+            if(!class_exists('UStringHelper')) {
+                include_once JPATH_ROOT.'/components/com_uu/helpers/ustring.php';
+            }
+            //uufieldinterface
+            include_once JPATH_ROOT.'/components/com_uu/libraries/uufieldinterface.php';
+            $uumodel = new UuModelRegistration();
+            $result = $uumodel->quickregister($data,$code_of_country,$mt_accounts,$seller_info ,$braintreeinfo );
+            if($result > 0){
+                $logindata = array();
+                $logindata['username'] = $data['username'];//$input->$method->get('username', '', 'USERNAME');
+                $logindata['password'] = $data['password1'];//$input->$method->get('password', '', 'RAW');
+                $credentials = array();
+                $credentials['username'] = $logindata['username'];
+                $credentials['password'] = $logindata['password'];
+                $options = array();
+                $options['remember'] = false;
+                //$options['return'] = 'index.php?option=com_virtuemart&view=cart&Itemid=370';
+                if (true === $app->login($credentials, $options)) {
+                    $user = JFactory::getUser();
+                    $id_user = $user->id;
+                    return true;
+                              
+                    } else {
+                        return false;
+                                        
+
+                }
+            }else{
+                return false;
+            }
+        }
 
         public function registerlogin(){
             $params = JComponentHelper::getParams('com_users');
@@ -371,6 +443,10 @@ class VirtueMartControllerCart extends JControllerLegacy {
             $data = array();
             $data['username'] = $input->post->get('fxbusername','','string');
             $data['email1'] = $input->post->get('fxbemail1','','string');
+            if(!filter_var($data['email1'],FILTER_VALIDATE_EMAIL)){
+                $app->enqueueMessage('Email has wrong format;');
+                return false;
+            }
             $data['password1'] = $input->post->get('fxbpassword1','','string');
             $data['name'] = $input->post->get('fxbname','','string');
             $data['cf_phone'] = $input->post->get('fxbcf_phone','','string');
@@ -566,7 +642,7 @@ class VirtueMartControllerCart extends JControllerLegacy {
                         $fxbregisterselected = $input->post->get('fxbregisterselected',1,'int');                        
                         //fxbregisterselected
                         if($fxbregisterselected == 1){
-                           $result_log = $this->registerlogin();
+                           $result_log = $this->registerlogin2();
                         }elseif($fxbregisterselected == 2){
                            $result_log = $this->login();
                         }
