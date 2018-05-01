@@ -105,11 +105,24 @@ Biggest Drawdown (biggest negative month):
                     
                     
                     <div class="clearfix"></div>
-
+                    <div class="ull-left tab-tabbar">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">
+                                <i class="fa fa-line-chart"></i> All period</a></li>
+                            <li role="presentation" ><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-line-chart"></i> Yearly</a></li>
+                            
+                            
+                        </ul>
+                    </div>
                     <!-- Tab panes -->
                     <div class="tab-content">
                         
-                        <div role="tabpanel" class="tab-pane active" id="profile">
+                        <div role="tabpanel" class="tab-pane active" id="home">
+                            <div id="totbalance" style="width: 100%; height: 400px; margin: 0 auto"></div>
+                            
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="profile">
                             <?php 
 
 
@@ -262,6 +275,8 @@ foreach ($perf_data as $yrec){
         <?php
         $i++;
 }
+
+
 ?>
 
     jQuery(document).ready(function(){
@@ -289,6 +304,67 @@ $i++;
         //creatMonthReport();
         //creatCapsulestats();
         createMultistats2();
+        
+        Highcharts.chart('totbalance', {
+  chart: {
+    type: 'line',
+    spacingBottom: 30
+  },
+  title: {
+    text: 'Fruit consumption *'
+  },
+  subtitle: {
+    text: '* Jane\'s banana consumption is unknown',
+    floating: true,
+    align: 'right',
+    verticalAlign: 'bottom',
+    y: 15
+  },
+  legend: {
+    layout: 'vertical',
+    align: 'left',
+    verticalAlign: 'top',
+    x: 150,
+    y: 100,
+    floating: true,
+    borderWidth: 1,
+    backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+  },
+  xAxis: {
+    categories: ['Apples', 'Pears', 'Oranges', 'Bananas', 'Grapes', 'Plums', 'Strawberries', 'Raspberries']
+  },
+  yAxis: {
+    title: {
+      text: 'Y-Axis'
+    },
+    labels: {
+      formatter: function () {
+        return this.value;
+      }
+    }
+  },
+  tooltip: {
+    formatter: function () {
+      return '<b>' + this.series.name + '</b><br/>' +
+        this.x + ': ' + this.y;
+    }
+  },
+  plotOptions: {
+    area: {
+      fillOpacity: 0.5
+    }
+  },
+  credits: {
+    enabled: false
+  },
+  series: [{
+    name: 'John',
+    data: [0, 1, 4, 4, 5, 2, 3, 7]
+  }, {
+    name: 'Jane',
+    data: [1, 0, 3, null, 3, 1, 2, 1]
+  }]
+});
     });
 
     function ChartParent2(divId) 
@@ -760,3 +836,72 @@ $phd_total_stat = $productcustomer->getPhDTotalStat($id_fx);
 
 
 </div>
+
+<!--
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+Highcharts.chart('totbalance', {
+  chart: {
+    type: 'line',
+    spacingBottom: 30
+  },
+  title: {
+    text: 'Fruit consumption *'
+  },
+  subtitle: {
+    text: '* Jane's banana consumption is unknown',
+    floating: true,
+    align: 'right',
+    verticalAlign: 'bottom',
+    y: 15
+  },
+  legend: {
+    layout: 'vertical',
+    align: 'left',
+    verticalAlign: 'top',
+    x: 150,
+    y: 100,
+    floating: true,
+    borderWidth: 1,
+    backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+  },
+  xAxis: {
+    categories: ['Apples', 'Pears', 'Oranges', 'Bananas', 'Grapes', 'Plums', 'Strawberries', 'Raspberries']
+  },
+  yAxis: {
+    title: {
+      text: 'Y-Axis'
+    },
+    labels: {
+      formatter: function () {
+        return this.value;
+      }
+    }
+  },
+  tooltip: {
+    formatter: function () {
+      return '<b>' + this.series.name + '</b><br/>' +
+        this.x + ': ' + this.y;
+    }
+  },
+  plotOptions: {
+    area: {
+      fillOpacity: 0.5
+    }
+  },
+  credits: {
+    enabled: false
+  },
+  series: [{
+    name: 'John',
+    data: [0, 1, 4, 4, 5, 2, 3, 7]
+  }, {
+    name: 'Jane',
+    data: [1, 0, 3, null, 3, 1, 2, 1]
+  }]
+});
+-->
