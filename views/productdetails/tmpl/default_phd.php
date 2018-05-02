@@ -120,7 +120,49 @@ Biggest Drawdown (biggest negative month):
                         
                         <div role="tabpanel" class="tab-pane active" id="home">
                             <div id="totbalance" style="width: 100%; height: 400px; margin: 0 auto"></div>
-                            
+                            <div class="custom-charttab">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Jan</th>
+                                    <th>Feb</th>
+                                    <th>Mar</th>
+                                    <th>Apr</th>
+                                    <th>May</th>
+                                    <th>Jun</th>
+                                    <th>Jul</th>
+                                    <th>Aug</th>
+                                    <th>Sep</th>
+                                    <th>Oct</th>
+                                    <th>Nov</th>
+                                    <th>Dec</th>
+                                    <th>YTD</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2017</td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> 
+                                    <td><span data-toggle="tooltip" title="" data-original-title="Growth for 2017.11: 0%">0</span></td>
+                                    <td><span data-toggle="tooltip" title="" data-original-title="Growth for 2017.12: -1193.94%">-1193.94</span></td> 
+                                    <td><span data-toggle="tooltip" data-title="Growth for 2017: -1193.94%" data-original-title="" title="">-1193.94%</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2018</td>
+                                    <td><span data-toggle="tooltip" title="" data-original-title="Growth for 2018.01: 13.83%">13.83</span></td>
+                                    <td><span data-toggle="tooltip" title="" data-original-title="Growth for 2018.02: 30.61%">30.61</span></td>
+                                    <td><span data-toggle="tooltip" title="" data-original-title="Growth for 2018.03: -26.72%">-26.72</span></td>
+                                    <td><span data-toggle="tooltip" title="" data-original-title="Growth for 2018.04: -22.53%">-22.53</span></td>
+                                    <td><span data-toggle="tooltip" title="" data-original-title="Growth for 2018.05: 333.93%">333.93</span></td>
+                                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td><span data-toggle="tooltip" data-title="Growth for 2018: 329.12%" data-original-title="" title="">329.12%</span></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="13" align="right">Total:</td>
+                                    <td><span data-toggle="tooltip" title="" data-original-title="Total Growth: -864.82%">-864.82%</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="profile">
                             <?php 
@@ -279,6 +321,107 @@ foreach ($perf_data as $yrec){
 
 ?>
 
+
+<?php 
+$i = 1;
+$new_perf_data = array_reverse($perf_data);
+$totcategories = '';
+$totseries = '';
+$startvar = 1000;
+$first_comma = false;
+$first_comma2 = false;
+foreach ($new_perf_data as $yrec){
+    $check = $productcustomer->checkBrokenPhdData($yrec);
+    if(!$check){
+        continue;
+    }
+    if($first_comma){
+        $totcategories .= ",'".$yrec['year']." Jan','".$yrec['year']." Feb','".$yrec['year']." Mar','".$yrec['year']." Apr','". $yrec['year']." May','". $yrec['year']." Jun','". $yrec['year']." Jul','". $yrec['year']." Aug','". $yrec['year']." Sep','".$yrec['year']." Oct','".$yrec['year']." Nov','". $yrec['year']." Dec'";
+    }else{
+        $totcategories .= "'".$yrec['year']." Jan','".$yrec['year']." Feb','".$yrec['year']." Mar','".$yrec['year']." Apr','". $yrec['year']." May','". $yrec['year']." Jun','". $yrec['year']." Jul','". $yrec['year']." Aug','". $yrec['year']." Sep','".$yrec['year']." Oct','".$yrec['year']." Nov','". $yrec['year']." Dec'";
+        $first_comma = true;
+    }
+    
+
+        
+        if(array_key_exists('Jan', $yrec) && $yrec['Jan'] !== '') {
+            $startvar += $startvar/100*$yrec['Jan'];
+            if($first_comma2){
+                $totseries .=','.$startvar;
+            }else{
+                $totseries .= $startvar;
+                $first_comma2 = true;
+            }
+        }else{
+            
+            if($first_comma2){
+                $totseries .=','.'null';
+            }else{
+                $totseries .='null';
+                $first_comma2 = true;
+            }
+        }
+        if(array_key_exists('Feb', $yrec) && $yrec['Feb'] !== '') {
+            $startvar += $startvar/100*$yrec['Feb']; $totseries .=','.$startvar;
+            
+        }else{
+            $totseries .=','.'null';}
+        if(array_key_exists('March', $yrec) && $yrec['March'] !== '') {
+            $startvar += $startvar/100*$yrec['March']; $totseries .=','.$startvar;
+            
+        }else{
+            $totseries .=','.'null';} 
+        if(array_key_exists('Apr', $yrec) && $yrec['Apr'] !== '') {
+            $startvar += $startvar/100*$yrec['Apr']; $totseries .=','.$startvar;
+            
+        }else{
+            $totseries .=','.'null';}
+        if(array_key_exists('May', $yrec) && $yrec['May'] !== '') {
+            $startvar += $startvar/100*$yrec['May']; $totseries .=','.$startvar;
+            
+        }else{
+            $totseries .=','.'null';}
+        if(array_key_exists('Jun', $yrec) && $yrec['Jun'] !== '') {
+            $startvar += $startvar/100*$yrec['Jun']; $totseries .=','.$startvar;
+            
+        }else{
+            $totseries .=','.'null';} 
+        if(array_key_exists('Jul', $yrec) && $yrec['Jul'] !== '') {
+            $startvar += $startvar/100*$yrec['Jul']; $totseries .=','.$startvar;
+            
+        }else{
+            $totseries .=','.'null';}
+        if(array_key_exists('Aug', $yrec) && $yrec['Aug'] !== '') {
+            $startvar += $startvar/100*$yrec['Aug']; $totseries .=','.$startvar;
+            
+        }else{
+            $totseries .=','.'null';}
+        if(array_key_exists('Sep', $yrec) && $yrec['Sep'] !== '') {
+            $startvar += $startvar/100*$yrec['Sep']; $totseries .=','.$startvar;
+            
+        }else{
+            $totseries .=','.'null';}
+        if(array_key_exists('Oct', $yrec) && $yrec['Oct'] !== '') {
+            $startvar += $startvar/100*$yrec['Oct']; $totseries .=','.$startvar;
+            
+        }else{
+            $totseries .=','.'null';}
+        if(array_key_exists('Nov', $yrec) && $yrec['Nov'] !== '') {
+            $startvar += $startvar/100*$yrec['Nov']; $totseries .=','.$startvar;
+            
+        }else{
+            $totseries .=','.'null';}
+        if(array_key_exists('Dec', $yrec) && $yrec['Dec'] !== '') {
+            $startvar += $startvar/100*$yrec['Dec']; $totseries .=','.$startvar;
+            
+        }else{
+            $totseries .=','.'null';}
+        $i++;
+}
+
+
+?>
+    
     jQuery(document).ready(function(){
      <?php 
 $i = 1;
@@ -304,8 +447,63 @@ $i++;
         //creatMonthReport();
         //creatCapsulestats();
         createMultistats2();
-        
+<?php if(true){ ?>        
         Highcharts.chart('totbalance', {
+  chart: {
+    type: 'line',
+    spacingBottom: 30
+  },
+  title: {
+    text: 'PhD statistic for all period'
+  },
+  subtitle: {
+    text: '*',
+    floating: true,
+    align: 'right',
+    verticalAlign: 'bottom',
+    y: 15
+  },
+  
+  xAxis: {
+    categories: [<?php echo $totcategories; ?>]
+  },
+  yAxis: {
+    title: {
+      text: 'Performance'
+    },
+    labels: {
+      formatter: function () {
+        return this.value;
+      }
+    }
+  },
+  tooltip: {
+    formatter: function () {
+      return '<b>' + this.series.name + '</b><br/>' +        this.x + ': ' + this.y;
+    }
+  },
+  plotOptions: {
+    area: {
+      fillOpacity: 0.5
+    }
+  },
+  credits: {
+    enabled: false
+  },
+  series: [{
+    name: 'All period',
+    color:"#ed423a",
+    showMarker:false,
+    data: [<?php echo $totseries; ?>]
+  }]
+});
+
+<?php } 
+
+if(false){
+    ?>
+
+ Highcharts.chart('totbalance', {
   chart: {
     type: 'line',
     spacingBottom: 30
@@ -331,7 +529,7 @@ $i++;
     backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
   },
   xAxis: {
-    categories: ['Apples', 'Pears', 'Oranges', 'Bananas', 'Grapes', 'Plums', 'Strawberries', 'Raspberries']
+    categories: ['2013 Jan','2013 Feb','2013 Mar','2013 Apr','2013 May','2013 Jun','2013 Jul','2013 Aug','2013 Sep','2013 Oct','2013 Nov','2013 Dec','2014 Jan','2014 Feb','2014 Mar','2014 Apr','2014 May','2014 Jun','2014 Jul','2014 Aug','2014 Sep','2014 Oct','2014 Nov','2014 Dec','2015 Jan','2015 Feb','2015 Mar','2015 Apr','2015 May','2015 Jun','2015 Jul','2015 Aug','2015 Sep','2015 Oct','2015 Nov','2015 Dec','2016 Jan','2016 Feb','2016 Mar','2016 Apr','2016 May','2016 Jun','2016 Jul','2016 Aug','2016 Sep','2016 Oct','2016 Nov','2016 Dec','2017 Jan','2017 Feb','2017 Mar','2017 Apr','2017 May','2017 Jun','2017 Jul','2017 Aug','2017 Sep','2017 Oct','2017 Nov','2017 Dec','2018 Jan','2018 Feb','2018 Mar','2018 Apr','2018 May','2018 Jun','2018 Jul','2018 Aug','2018 Sep','2018 Oct','2018 Nov','2018 Dec']
   },
   yAxis: {
     title: {
@@ -359,12 +557,14 @@ $i++;
   },
   series: [{
     name: 'John',
-    data: [0, 1, 4, 4, 5, 2, 3, 7]
-  }, {
-    name: 'Jane',
-    data: [1, 0, 3, null, 3, 1, 2, 1]
+    data: [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1213.5,1352.44575,null,null,null,null,null,null,null,null,null,null,1531.103833575,1343.69672434542,1206.50528878975,1485.44931155794,1714.50559540018,1770.22702725068,1689.68169751078,1900.04706885087,2305.13710392988,1948.99342137271,2360.42593262449,2643.67704453943,2972.81483658459,3365.52367649741,3847.46666697184,3365.37909360027,3874.22441255263,3361.27710033066,3842.61198109801,4427.07326342302,4323.03704173258,4474.34333819322,4658.68628372678,4947.99070194621,5053.87770296786,null,5232.78497365292,null,null,null,null,null,null,null,null,null]
   }]
 });
+
+<?php 
+    } 
+?>
+
     });
 
     function ChartParent2(divId) 

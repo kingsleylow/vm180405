@@ -153,6 +153,7 @@ if($tapStatus['status'] == 'success')
     curl_setopt($ch, CURLOPT_POSTFIELDS,  "account_id=$userAccountId");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $capsulestats = curl_exec($ch);
+    //var_dump($capsulestats);
     curl_close ($ch);
 
  //    var_dump($userAccountId);

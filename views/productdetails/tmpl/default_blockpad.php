@@ -284,7 +284,7 @@ echo $this->loadTemplate('images');
         <!-- </div> -->
 	    <li><a data-toggle="pill" href="#reviews">Reviews</a></li>
 	   <!-- <li><a data-toggle="pill" href="#statistics">Statistics</a></li> -->
-            <li><a data-toggle="pill" href="#phdstat">Past Performance</a></li>
+            
 	<?php
     } // Product Description END
 
@@ -334,9 +334,7 @@ if (!empty($this->product->product_desc)) {
   <p><?php echo $this->loadTemplate('statistics'); ?></p>
 </div>
     <?php } ?>
-<div id="phdstat" class="tab-pane fade">
-  <p><?php echo $this->loadTemplate('phd'); ?></p>
-</div>    
+ 
 <?php
 }
 // Show child categories

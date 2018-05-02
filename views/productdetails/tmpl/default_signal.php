@@ -283,7 +283,7 @@ echo $this->loadTemplate('images');
 	<?php //echo $this->product->product_desc; ?>
         <!-- </div> -->
 	    <li><a data-toggle="pill" href="#reviews">Reviews</a></li>
-	   <!-- <li><a data-toggle="pill" href="#statistics">Statistics</a></li> -->
+	   <li><a data-toggle="pill" href="#statistics">Statistics</a></li>
             <li><a data-toggle="pill" href="#phdstat">Past Performance</a></li>
 	<?php
     } // Product Description END
@@ -329,7 +329,7 @@ if (!empty($this->product->product_desc)) {
 <div id="reviews" class="tab-pane fade">
   <p><?php echo $this->loadTemplate('reviews'); ?></p>
 </div>
-    <?php if(false){ ?>
+    <?php if(true){ ?>
 <div id="statistics" class="tab-pane fade">
   <p><?php echo $this->loadTemplate('statistics'); ?></p>
 </div>
