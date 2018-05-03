@@ -2,7 +2,8 @@
   <h4>Past Performance</h4>
 
   <?php 
-
+$doc=JFactory::getDocument();
+$doc->addStyleSheet(JURI::base()."plugins/system/vmfxbot/assets/stattables.css");
   $productId = $this->product->virtuemart_product_id;
 
   // $productid = (isset($_GET['product']) && $_GET['product'] != '' ? $_GET['product'] : false);
@@ -121,7 +122,7 @@ Biggest Drawdown (biggest negative month):
                         <div role="tabpanel" class="tab-pane active" id="home">
                             <div id="totbalance" style="width: 100%; height: 400px; margin: 0 auto"></div>
                             <div class="custom-charttab">
-                        <table class="table">
+                        <table class="table" id="capsulestat" style="margin-top: 30px;">
                             <thead>
                                 <tr>
                                     <th></th>
@@ -329,28 +330,39 @@ $totcategories = '';
 $totseries = '';
 $startvar = 1000;
 $first_comma = false;
-$first_comma2 = false;
+$first_comma2 = false; $capsulestats = '';$totalcapsule = 0;$totalmonthes = 0;
 foreach ($new_perf_data as $yrec){
     $check = $productcustomer->checkBrokenPhdData($yrec);
     if(!$check){
         continue;
     }
+    $ytd = 0;
+    $yearmonthes = 0;
     if($first_comma){
         $totcategories .= ",'".$yrec['year']." Jan','".$yrec['year']." Feb','".$yrec['year']." Mar','".$yrec['year']." Apr','". $yrec['year']." May','". $yrec['year']." Jun','". $yrec['year']." Jul','". $yrec['year']." Aug','". $yrec['year']." Sep','".$yrec['year']." Oct','".$yrec['year']." Nov','". $yrec['year']." Dec'";
     }else{
         $totcategories .= "'".$yrec['year']." Jan','".$yrec['year']." Feb','".$yrec['year']." Mar','".$yrec['year']." Apr','". $yrec['year']." May','". $yrec['year']." Jun','". $yrec['year']." Jul','". $yrec['year']." Aug','". $yrec['year']." Sep','".$yrec['year']." Oct','".$yrec['year']." Nov','". $yrec['year']." Dec'";
         $first_comma = true;
     }
-    
+    $capsulestats .= '<tr><td>'.$yrec['year'].'</td>';
 
         
         if(array_key_exists('Jan', $yrec) && $yrec['Jan'] !== '') {
             $startvar += $startvar/100*$yrec['Jan'];
+            $totalcapsule +=$yrec['Jan'];
+            $totalmonthes ++;
+            $yearmonthes++;
+            $ytd += $yrec['Jan'];
             if($first_comma2){
                 $totseries .=','.$startvar;
             }else{
                 $totseries .= $startvar;
                 $first_comma2 = true;
+            }
+            if($yrec['Jan'] > 0){
+                $capsulestats .= '<td class="fxbblue">'.$yrec['Jan'].'</td>';
+            }else{
+                $capsulestats .= '<td class="fxbred">'.$yrec['Jan'].'</td>';
             }
         }else{
             
@@ -360,65 +372,194 @@ foreach ($new_perf_data as $yrec){
                 $totseries .='null';
                 $first_comma2 = true;
             }
+            
+                $capsulestats .= '<td class="fxbempty">'.'</td>';
+            
         }
         if(array_key_exists('Feb', $yrec) && $yrec['Feb'] !== '') {
             $startvar += $startvar/100*$yrec['Feb']; $totseries .=','.$startvar;
-            
+            $totalcapsule +=$yrec['Feb'];
+            $totalmonthes ++;
+            $yearmonthes++;
+            $ytd += $yrec['Feb'];
+            if($yrec['Feb'] > 0){
+                $capsulestats .= '<td class="fxbblue">'.$yrec['Feb'].'</td>';
+            }else{
+                $capsulestats .= '<td class="fxbred">'.$yrec['Feb'].'</td>';
+            }
         }else{
-            $totseries .=','.'null';}
+            $totseries .=','.'null';
+            $capsulestats .= '<td class="fxbempty">'.'</td>';
+        }
         if(array_key_exists('March', $yrec) && $yrec['March'] !== '') {
             $startvar += $startvar/100*$yrec['March']; $totseries .=','.$startvar;
-            
+            $totalcapsule +=$yrec['March'];
+            $totalmonthes ++;
+            $yearmonthes++;
+            $ytd += $yrec['March'];
+            if($yrec['March'] > 0){
+                $capsulestats .= '<td class="fxbblue">'.$yrec['March'].'</td>';
+            }else{
+                $capsulestats .= '<td class="fxbred">'.$yrec['March'].'</td>';
+            }
         }else{
-            $totseries .=','.'null';} 
+            $totseries .=','.'null';
+            $capsulestats .= '<td class="fxbempty">'.'</td>';
+        } 
         if(array_key_exists('Apr', $yrec) && $yrec['Apr'] !== '') {
             $startvar += $startvar/100*$yrec['Apr']; $totseries .=','.$startvar;
-            
+            $totalcapsule +=$yrec['Apr'];
+            $totalmonthes ++;
+            $yearmonthes++;
+            $ytd += $yrec['Apr'];
+            if($yrec['Apr'] > 0){
+                $capsulestats .= '<td class="fxbblue">'.$yrec['Apr'].'</td>';
+            }else{
+                $capsulestats .= '<td class="fxbred">'.$yrec['Apr'].'</td>';
+            }
         }else{
-            $totseries .=','.'null';}
+            $totseries .=','.'null';
+            $capsulestats .= '<td class="fxbempty">'.'</td>';
+        }
         if(array_key_exists('May', $yrec) && $yrec['May'] !== '') {
             $startvar += $startvar/100*$yrec['May']; $totseries .=','.$startvar;
-            
+            $totalcapsule +=$yrec['May'];
+            $totalmonthes ++;
+            $yearmonthes++;
+            $ytd += $yrec['May'];
+            if($yrec['May'] > 0){
+                $capsulestats .= '<td class="fxbblue">'.$yrec['May'].'</td>';
+            }else{
+                $capsulestats .= '<td class="fxbred">'.$yrec['May'].'</td>';
+            }
         }else{
-            $totseries .=','.'null';}
+            $totseries .=','.'null';
+            $capsulestats .= '<td class="fxbempty">'.'</td>';
+        }
         if(array_key_exists('Jun', $yrec) && $yrec['Jun'] !== '') {
             $startvar += $startvar/100*$yrec['Jun']; $totseries .=','.$startvar;
-            
+            $totalcapsule +=$yrec['Jun'];
+            $totalmonthes ++;
+            $yearmonthes++;
+            $ytd += $yrec['Jun'];
+            if($yrec['Jun'] > 0){
+                $capsulestats .= '<td class="fxbblue">'.$yrec['Jun'].'</td>';
+            }else{
+                $capsulestats .= '<td class="fxbred">'.$yrec['Jun'].'</td>';
+            }
         }else{
-            $totseries .=','.'null';} 
+            $totseries .=','.'null';
+            $capsulestats .= '<td class="fxbempty">'.'</td>';
+        } 
         if(array_key_exists('Jul', $yrec) && $yrec['Jul'] !== '') {
             $startvar += $startvar/100*$yrec['Jul']; $totseries .=','.$startvar;
-            
+            $totalcapsule +=$yrec['Jul'];
+            $totalmonthes ++;
+            $yearmonthes++;
+            $ytd += $yrec['Jul'];
+            if($yrec['Jul'] > 0){
+                $capsulestats .= '<td class="fxbblue">'.$yrec['Jul'].'</td>';
+            }else{
+                $capsulestats .= '<td class="fxbred">'.$yrec['Jul'].'</td>';
+            }
         }else{
-            $totseries .=','.'null';}
+            $totseries .=','.'null';
+            $capsulestats .= '<td class="fxbempty">'.'</td>';
+        }
         if(array_key_exists('Aug', $yrec) && $yrec['Aug'] !== '') {
             $startvar += $startvar/100*$yrec['Aug']; $totseries .=','.$startvar;
-            
+            $totalcapsule +=$yrec['Aug'];
+            $totalmonthes ++;
+            $yearmonthes++;
+            $ytd += $yrec['Aug'];
+            if($yrec['Aug'] > 0){
+                $capsulestats .= '<td class="fxbblue">'.$yrec['Aug'].'</td>';
+            }else{
+                $capsulestats .= '<td class="fxbred">'.$yrec['Aug'].'</td>';
+            }
         }else{
-            $totseries .=','.'null';}
+            $totseries .=','.'null';
+            $capsulestats .= '<td class="fxbempty">'.'</td>';
+        }
         if(array_key_exists('Sep', $yrec) && $yrec['Sep'] !== '') {
             $startvar += $startvar/100*$yrec['Sep']; $totseries .=','.$startvar;
-            
+            $totalcapsule +=$yrec['Sep'];
+            $totalmonthes ++;
+            $yearmonthes++;
+            $ytd += $yrec['Sep'];
+            if($yrec['Sep'] > 0){
+                $capsulestats .= '<td class="fxbblue">'.$yrec['Sep'].'</td>';
+            }else{
+                $capsulestats .= '<td class="fxbred">'.$yrec['Sep'].'</td>';
+            }
         }else{
-            $totseries .=','.'null';}
+            $totseries .=','.'null';
+            $capsulestats .= '<td class="fxbempty">'.'</td>';
+        }
         if(array_key_exists('Oct', $yrec) && $yrec['Oct'] !== '') {
             $startvar += $startvar/100*$yrec['Oct']; $totseries .=','.$startvar;
-            
+            $totalcapsule +=$yrec['Oct'];
+            $totalmonthes ++;
+            $yearmonthes++;
+            $ytd += $yrec['Oct'];
+            if($yrec['Oct'] > 0){
+                $capsulestats .= '<td class="fxbblue">'.$yrec['Oct'].'</td>';
+            }else{
+                $capsulestats .= '<td class="fxbred">'.$yrec['Oct'].'</td>';
+            }
         }else{
-            $totseries .=','.'null';}
+            $totseries .=','.'null';
+            $capsulestats .= '<td class="fxbempty">'.'</td>';
+        }
         if(array_key_exists('Nov', $yrec) && $yrec['Nov'] !== '') {
             $startvar += $startvar/100*$yrec['Nov']; $totseries .=','.$startvar;
-            
+            $totalcapsule +=$yrec['Nov'];
+            $totalmonthes ++;
+            $yearmonthes++;
+            $ytd += $yrec['Nov'];
+            if($yrec['Nov'] > 0){
+                $capsulestats .= '<td class="fxbblue">'.$yrec['Nov'].'</td>';
+            }else{
+                $capsulestats .= '<td class="fxbred">'.$yrec['Nov'].'</td>';
+            }
         }else{
-            $totseries .=','.'null';}
+            $totseries .=','.'null';
+            $capsulestats .= '<td class="fxbempty">'.'</td>';
+        }
         if(array_key_exists('Dec', $yrec) && $yrec['Dec'] !== '') {
             $startvar += $startvar/100*$yrec['Dec']; $totseries .=','.$startvar;
-            
+            $totalcapsule +=$yrec['Dec'];
+            $totalmonthes ++;
+            $yearmonthes++;
+            $ytd += $yrec['Dec'];
+            if($yrec['Dec'] > 0){
+                $capsulestats .= '<td class="fxbblue">'.$yrec['Dec'].'</td>';
+            }else{
+                $capsulestats .= '<td class="fxbred">'.$yrec['Dec'].'</td>';
+            }
         }else{
-            $totseries .=','.'null';}
+            $totseries .=','.'null';
+            $capsulestats .= '<td class="fxbempty">'.'</td>';
+        }
+        if($yearmonthes > 0){
+            if($ytd > 0){
+                $capsulestats .= '<td class="fxbblue"> '.$ytd.'</td>'; 
+            }else{
+                $capsulestats .= '<td class="fxbred"> '.$ytd.'</td>'; 
+            }
+        }else{
+            $capsulestats .= '<td></td>'; 
+        }
+        $capsulestats .= '</tr>';
         $i++;
-}
-
+}       
+$capsulestats .= '<tr><td colspan="13" align="right">Total:</td>';
+    if($totalcapsule > 0){
+        $capsulestats .=  '<td><span class="fxbblue"data-toggle="tooltip" title="" >'.$totalcapsule;
+    }else{
+        $capsulestats .=  '<td><span class="fxbred"data-toggle="tooltip" title="" >'.$totalcapsule;
+    }
+$capsulestats .= '</span></td></tr>';
 
 ?>
     
@@ -447,6 +588,8 @@ $i++;
         //creatMonthReport();
         //creatCapsulestats();
         createMultistats2();
+        
+        creatCapsulestats2();        
 <?php if(true){ ?>        
         Highcharts.chart('totbalance', {
   chart: {
@@ -1018,6 +1161,14 @@ if(false){
                     '</ul>';
             jQuery('div#stats2').html(st);
 
+    }
+    function creatCapsulestats2()
+    {
+            var capsulestats2 = '<?php 
+            echo $capsulestats;
+            ?>';
+            jQuery('#capsulestat tbody').html(capsulestats2);
+            jQuery('[data-toggle="tooltip"]').tooltip();
     }
 /*
 *  $productcustomer->formatMoney(floatval($phd_stat->tat), 2, 'USD ') ;
