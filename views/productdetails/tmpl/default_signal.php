@@ -274,7 +274,7 @@ echo $this->loadTemplate('images');
 	<?php
 	//echo ($this->product->product_in_stock - $this->product->product_ordered);
 	// Product Description
-	if (!empty($this->product->product_desc)) {
+	if (!empty($this->product->product_desc) || true) {
 	    ?>
 	    <li class="active"><a data-toggle="pill" href="#desc"><?php echo vmText::_('COM_VIRTUEMART_PRODUCT_DESC_TITLE') ?></a></li>
         <!-- <div class="product-description" > -->
@@ -314,7 +314,7 @@ echo $this->loadTemplate('images');
 <?php // onContentAfterDisplay event
 
 echo $this->product->event->afterDisplayContent;
-if (!empty($this->product->product_desc)) {
+if (!empty($this->product->product_desc) || true) {
 	?>
 	<div id="desc" class="tab-pane fade in active">
 		<div class="customer-reviews">

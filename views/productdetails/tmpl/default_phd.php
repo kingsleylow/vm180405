@@ -122,7 +122,7 @@ Biggest Drawdown (biggest negative month):
                         
                         <div role="tabpanel" class="tab-pane active" id="home">
                             <div id="totbalance" style="width: 100%; height: 400px; margin: 0 auto"></div>
-                            <div id="container2" style="width: 100%; height: 400px; margin: 0 auto"></div>
+                            <!--<div id="container2" style="width: 100%; height: 400px; margin: 0 auto"></div>-->
                             
                             <div class="custom-charttab">
                         <table class="table" id="capsulestat" style="margin-top: 30px;">
@@ -635,10 +635,10 @@ $i++;
   },
   credits: {
     enabled: false
-  },
+  },      
   series: [{
     name: 'All period',
-    color:"#ed423a",
+    color:"rgba(124,181,236,0.05)",
     showMarker:false,
     data: [<?php echo $totseries; ?>]
   }]
@@ -2578,7 +2578,7 @@ var spdata = [
 [1368057600000,456.77],
 [1368144000000,452.97]
 ]
-areasplinedraw(spdata);
+//areasplinedraw(spdata);
 
     });
 
