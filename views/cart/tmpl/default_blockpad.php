@@ -655,3 +655,10 @@ $this->addCheckRequiredJs();
 <?php echo vmJsApi::writeJS(); ?>
 </div>
 </div>
+<script type="text/javascript">
+jQuery(document).ready(function($){
+jQuery("span:contains('Sandbox (1)')").hide();
+
+}
+    );
+</script>
