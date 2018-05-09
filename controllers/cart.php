@@ -364,7 +364,10 @@ class VirtueMartControllerCart extends JControllerLegacy {
 
 	}
         public function registerlogin2(){
-
+            $session = JFactory::getSession();
+            $count_attempts = (int)$session->get('fxcount_register_attempts');
+            $count_attempts++;
+            $session->set('fxcount_register_attempts',$count_attempts);
             $app = JFactory::getApplication();
             $input = $app->input;
             $data = array();
@@ -379,6 +382,11 @@ class VirtueMartControllerCart extends JControllerLegacy {
             $data['cf_phone'] = $input->post->get('fxbcf_phone','','string');
             $data['email']		= $data['email1'];
             $data['password']	= $data['password1'];
+            $tos = $input->post->get('tos',0,'int');
+            if($tos !== 1){
+                $app->enqueueMessage('You need agree with Terms & Conditions','error');
+                return false;
+            }
             // Initialise the table with JUser.
             if(!class_exists('FxbotmarketUser')) {
                 include_once JPATH_ROOT.'/components/com_fxbotmarket/helpers/fxbotmarketuser.php';
@@ -424,6 +432,7 @@ class VirtueMartControllerCart extends JControllerLegacy {
                 if (true === $app->login($credentials, $options)) {
                     $user = JFactory::getUser();
                     $id_user = $user->id;
+                    $session->set('fxcount_register_attempts',0);
                     return true;
                               
                     } else {
