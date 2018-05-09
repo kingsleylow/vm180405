@@ -369,6 +369,10 @@ class VirtueMartControllerCart extends JControllerLegacy {
             $count_attempts++;
             $session->set('fxcount_register_attempts',$count_attempts);
             $app = JFactory::getApplication();
+            if(!class_exists('FxbotmarketLogger')) {
+                include_once JPATH_ROOT.'/components/com_fxbotmarket/helpers/logger.php';
+            }
+          $logger = new FxbotmarketLogger();
             $input = $app->input;
             $data = array();
             $data['username'] = $input->post->get('fxbusername','','string');
@@ -382,10 +386,76 @@ class VirtueMartControllerCart extends JControllerLegacy {
             $data['cf_phone'] = $input->post->get('fxbcf_phone','','string');
             $data['email']		= $data['email1'];
             $data['password']	= $data['password1'];
+            $app->setUserState('com_fxbotmarket.registration.data', $data);
+            $code_of_country = $input->post->get('fxbcountry_id',0,'int');
+            $app->setUserState('com_fxbotmarket.registration.code_of_country', $code_of_country);
             $tos = $input->post->get('tos',0,'int');
             if($tos !== 1){
                 $app->enqueueMessage('You need agree with Terms & Conditions','error');
                 return false;
+            }
+            if(!class_exists('FxbotmarketValidator')) {
+                include_once JPATH_ROOT.'/components/com_fxbotmarket/helpers/validator.php';
+            }
+            $valid = true;
+            if(FxbotmarketValidator::checkPhone($data['cf_phone']) <=0){
+                $app->enqueueMessage('Please enter correct phone number', 'error');
+                $valid = false;
+            }
+            if(FxbotmarketValidator::checkEmail($data['email1']) <=0){
+                $app->enqueueMessage('Please enter correct email', 'error');
+                //$this->setRedirect(JRoute::_('index.php?option=com_uu&view=registration', false));
+                $valid = false;
+            }
+            if(FxbotmarketValidator::checkUsername($data['username']) <=0){
+                $app->enqueueMessage('Please enter correct username', 'error');
+                $valid = false;
+            }
+            if(FxbotmarketValidator::checkName($data['name']) <=0){
+                $app->enqueueMessage('Please enter correct name', 'error');
+                $valid = false;
+            }
+            if(FxbotmarketValidator::checkPassword($data['password1']) <=0){
+                $app->enqueueMessage('Please enter correct password', 'error');
+                $valid = false;
+            }
+            if(FxbotmarketValidator::checkCountry($code_of_country) <=0){
+                $app->enqueueMessage('Please select correct value at country list', 'error');
+                $valid = false;
+            }
+            if($valid === FALSE){
+                return false;
+            }
+            $challenge = $input->get('g-recaptcha-response', '', 'string');
+            $logger->checkAndLog('registration.txt','challenge');
+            $logger->checkAndLog('registration.txt',$challenge);
+            if (isset($challenge) && array_key_exists('g-recaptcha-response', $_POST)) {
+                $recaptcha_public = '6Le2UR8UAAAAAI9Ts5jptS9kDXL0TrqaRmeA-l0g';
+                $recaptcha_private = '6Le2UR8UAAAAAMaZT3di3XYvX2txKreHNzgcmz5N';
+                //get captcha key
+
+                $user =& JFactory::getUser();
+                $solved = $user->get($challenge, 0);
+                $logger->checkAndLog('registration.txt','solved = ');
+                $logger->checkAndLog('registration.txt',$solved);
+                if ($solved) {
+                    $user->set($challenge, null);
+                } else {
+                    // get a reCAPTCHA object
+                    require_once(JPATH_ROOT.'/components/com_uu/libraries/captcha/recaptcha.php');
+                    $recaptcha = JXRecaptcha::getInstance();
+
+                    // set the API keys for reCAPTCHA
+                    $recaptcha->setKeyPair($recaptcha_public, $recaptcha_private);
+
+                    // validate the captcha
+                    if (!$recaptcha->checkCaptcha()) {
+                        $app->enqueueMessage('Captcha responce is not valid', 'error');
+                        return false;
+                    } else {
+                        //unset captcha input
+                    }
+                }
             }
             // Initialise the table with JUser.
             if(!class_exists('FxbotmarketUser')) {
@@ -399,7 +469,7 @@ class VirtueMartControllerCart extends JControllerLegacy {
             $data['cf_state_province'] = "";
             $data['cf_zip'] = "";
             $data['ip_address'] = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
-            $code_of_country = $input->post->get('fxbcountry_id',0,'int');//[fxbotmarket_country_id]	string	"16"
+            
             $mt_accounts = array();//[fxbcountry_id]	string	"13"	
             $seller_info = new stdClass();
             $braintreeinfo = new stdClass();
@@ -657,7 +727,16 @@ class VirtueMartControllerCart extends JControllerLegacy {
                         }
                         if($result_log == false){
                             $mainframe->enqueueMessage('Wrong login or register?'.$this->contact_msg_suffix, 'error');
-                            $mainframe->redirect('index.php?'.$_SERVER['QUERY_STRING']);
+                            //$mainframe->redirect('index.php?'.$_SERVER['QUERY_STRING']);
+                            if(array_key_exists('QUERY_STRING',$_SERVER) && strpos('com',$_SERVER['QUERY_STRING']) > 0){
+                                $mainframe->redirect('index.php?'.$_SERVER['QUERY_STRING']);
+                            }else{
+                                $mainframe->redirect('https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+                                if(isset($_GET) && array_key_exists('option',$_GET) && array_key_exists('option',$_GET) && array_key_exists('view',$_GET) && array_key_exists('virtuemart_product_id',$_GET) && array_key_exists('virtuemart_category_id',$_GET)){
+                                    //$mainframe->redirect(JRoute::_('index.php?option='.$_GET['option'].'&view='.$_GET['view'].'&virtuemart_product_id='.$_GET['virtuemart_product_id'].'&virtuemart_category_id='.$_GET['virtuemart_category_id']),false);
+                                    //[virtuemart_product_id]	string	"173"	[virtuemart_category_id]	string	"15"	
+                                }
+                            }
                             return;
                         }
                     }
