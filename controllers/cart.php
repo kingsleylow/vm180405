@@ -338,6 +338,8 @@ class VirtueMartControllerCart extends JControllerLegacy {
                     $session->set('mtcart.eaaccountnumber', $eaacc);
                 }elseif($type_of_product == 1001){ //blockpad_register
                     $blockpad_register = $input->post->get('blockpad_register',0,'int');
+                    $fxpaymentmethod = $input->get('fxpaymentmethod',0,'int');
+                    $session->set('mtcart.fxpaymentmethod', $fxpaymentmethod);
                     if($blockpad_register == 1){//blockpad_source
                         $fxbregisterselected = $input->post->get('fxbregisterselected',1,'int');                        
                         //fxbregisterselected

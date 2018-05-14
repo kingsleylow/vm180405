@@ -91,7 +91,7 @@ if($this->ifsignal){
         </div>
                 <?php }
                 else{//stripe creditcard
-                    echo '<h3 class="confirm_order_thanks" style="color:red;">'.vmText::_('COM_VIRTUEMART_CART_ORDERDONE_THANK_YOU').' Please click on button below to continue.</h3>';
+                    echo '<h3 class="confirm_order_thanks" style="color:green;">'.vmText::_('COM_VIRTUEMART_CART_ORDERDONE_THANK_YOU').' Please click on button below to continue.</h3>';
 
                 ?>
 

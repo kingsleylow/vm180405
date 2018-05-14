@@ -24,12 +24,12 @@ if($this->product_type ==1001){//checks if product is downloadable
     if($this->fxpaymentmethod == 1){//if payment method is stripe card 
         
 
-                    echo '<h3 class="confirm_order_thanks" style="color:red;">'.vmText::_('COM_VIRTUEMART_CART_ORDERDONE_THANK_YOU').' Please click on button below to continue.</h3>';
+                    echo '<h3 class="confirm_order_thanks" style="color:green;">'.vmText::_('COM_VIRTUEMART_CART_ORDERDONE_THANK_YOU').' Please click on button below to continue.</h3>';
 
                 ?>
 
                 <form action="<?php 
-                echo JRoute::_ ('index.php?option=com_fxbotmarket&task=paystripe.paydownloadable&orderid='.(int)$this->fxbotmarket_id_downloadable_order);?>" method="POST">
+                echo JRoute::_ ('index.php?option=com_fxbotmarket&task=paystripe.paycardblockpad&orderid='.(int)$this->fxbotmarket_id_blockpad_order);?>" method="POST">
                     <input type="hidden" name="idev_custom[ip]" id="idev_custom_x21" />
                     <script type="text/javascript" src="https://fxbot.market/partners/connect/stripe_ip.php"></script>
                     <script
@@ -38,7 +38,8 @@ if($this->product_type ==1001){//checks if product is downloadable
                       data-image="https://fxbot.market/images/FXbot-3D-robot_1sm.png"
                       data-name="Fxbot Market"
                       data-description="Subscription for 1 montly box"
-                      data-amount="<?php echo $this->product_price; ?>"
+                      data-amount="<?php 
+                      echo $this->product_price; ?>"
                       data-label="Pay now!"
                       data-email ="<?php 
                       $user = JFactory::getUser();

@@ -467,7 +467,7 @@ if(is_object($this->cart) && isset($this->cart->cartPrices) && array_key_exists(
                 ?>
                 
                 
-                <?php if(false){?>
+                <?php if(true){?>
                 <p><input name="fxpaymentmethod" value="1" id="creditid"  onclick="selectMethod(1);" type="radio" <?php echo $cardchecked; ?>> Credit Card</p>
                         <?php  } ?>
                 <p><input name="fxpaymentmethod" value="0" id="paypalid" onclick="selectMethod(0);" type="radio" <?php echo $paypalchecked; ?>> Paypal</p>
